@@ -4,5 +4,9 @@
 return {
   'windwp/nvim-autopairs',
   event = 'InsertEnter',
-  opts = {},
+  config = true,
+  opts = {
+    check_ts = true,
+    disable_filetype = { 'clojure' }, -- Add this line
+  },
 }
