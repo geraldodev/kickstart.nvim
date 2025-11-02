@@ -1,0 +1,7 @@
+-- guess-indent
+-- https://github.com/NMAC427/guess-indent.nvim/
+
+return {
+  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+}
