@@ -199,7 +199,9 @@ return {
     --  - settings (table): Override the default settings passed when initializing the server.
     --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
     local servers = {
-      clojure_lsp = {},
+      clojure_lsp = {
+        cmd = { "/usr/local/bin/clojure-lsp" },
+       },
       -- clangd = {},
       -- gopls = {},
       -- pyright = {},
@@ -215,7 +217,7 @@ return {
 
       lua_ls = {
         -- cmd = { ... },
-        -- filetypes = { ... },
+        filetypes = { "lua" },
         -- capabilities = {},
         settings = {
           Lua = {
@@ -242,12 +244,15 @@ return {
     --
     -- You can add other tools here that you want Mason to install
     -- for you, so that they are available from within Neovim.
-    local ensure_installed = vim.tbl_keys(servers or {})
+    local ensure_installed = vim.tbl_keys({}) -- era servers or {} o que forçava a instalação do clojure_lsp que não quero
+    -- desta forma os que estiverem aqui serão explicitamente instalados
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+    -- pelo que entendi, esta função setup configura handlers, que vai ser chamado pelo mason-lspconfig
+    -- como ele não está instalando o clojure_lsp o setup para ele nunca será chamado
     require('mason-lspconfig').setup {
       ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
       automatic_installation = false,
@@ -262,5 +267,7 @@ return {
         end,
       },
     }
+    -- por isso chamamos setup específico pro clojure_lsp
+    vim.lsp.enable('clojure_lsp', servers.clojure_lsp)
   end,
 }
